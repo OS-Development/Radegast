@@ -49,6 +49,8 @@ namespace Radegast
 {
     public partial class ObjectsConsole : UserControl, IContextMenuProvider
     {
+        public List<Primitive> Prims = new List<Primitive>();
+
         private RadegastInstance instance;
         private GridClient client { get { return instance.Client; } }
         private Primitive currentPrim = new Primitive();
@@ -57,7 +59,6 @@ namespace Radegast
         PropertiesQueue propRequester;
         private Thread ContentsThread;
         private ObjectConsoleFilter filter;
-        private List<Primitive> Prims = new List<Primitive>();
         private ObjectSorter PrimSorter;
 
         public Primitive CurrentPrim { get { return currentPrim; } }
@@ -212,7 +213,7 @@ namespace Radegast
 
             lock (Prims)
             {
-                for (int i=0; i<Prims.Count; i++)
+                for (int i = 0; i < Prims.Count; i++)
                 {
                     Primitive prim = Prims[i];
                     if (prim.Properties != null && e.Names.ContainsKey(prim.Properties.OwnerID))
@@ -248,7 +249,7 @@ namespace Radegast
         {
             lock (Prims)
             {
-                for (int i=0; i<Prims.Count; i++)
+                for (int i = 0; i < Prims.Count; i++)
                 {
                     if (Prims[i].ID == props.ObjectID)
                     {
@@ -816,29 +817,33 @@ namespace Radegast
 
             lock (Prims)
             {
-                client.Network.CurrentSim.ObjectsPrimitives.ForEach(
-                    new Action<Primitive>(
-                    delegate(Primitive prim)
+                /*
+                var prims = client.Network.CurrentSim.ObjectsPrimitives.FindAll(prim =>
+                {
+                    return ((prim.ParentID == client.Self.LocalID) && (filter == ObjectConsoleFilter.Attached || filter == ObjectConsoleFilter.Both)) ||
+                        ((prim.ParentID == 0) && (filter == ObjectConsoleFilter.Rezzed || filter == ObjectConsoleFilter.Both));
+                });
+                */
+                client.Network.CurrentSim.ObjectsPrimitives.ForEach(prim =>
+                {
+                    int distance = (int)Vector3.Distance(prim.Position, location);
+                    if (prim.ParentID == client.Self.LocalID)
                     {
-                        int distance = (int)Vector3.Distance(prim.Position, location);
-                        if (prim.ParentID == client.Self.LocalID)
+                        distance = 0;
+                    }
+                    if (IncludePrim(prim) &&
+                        (prim.Position != Vector3.Zero) &&
+                        (distance < searchRadius) &&
+                        (txtSearch.Text.Length == 0 || (prim.Properties != null && prim.Properties.Name.ToLower().Contains(txtSearch.Text.ToLower()))) && //root prims and attachments only
+                        !Prims.Contains(prim))
+                    {
+                        Prims.Add(prim);
+                        if (prim.Properties == null)
                         {
-                            distance = 0;
-                        }
-                        if (IncludePrim(prim) &&
-                            (prim.Position != Vector3.Zero) &&
-                            (distance < searchRadius) &&
-                            (txtSearch.Text.Length == 0 || (prim.Properties != null && prim.Properties.Name.ToLower().Contains(txtSearch.Text.ToLower()))) && //root prims and attachments only
-                            !Prims.Contains(prim))
-                        {
-                            Prims.Add(prim);
-                            if (prim.Properties == null)
-                            {
-                                propRequester.RequestProps(prim);
-                            }
+                            propRequester.RequestProps(prim);
                         }
                     }
-                    ));
+                });
                 Prims.Sort(PrimSorter);
                 lstPrims.VirtualListSize = Prims.Count;
                 lstPrims.Invalidate();
@@ -890,9 +895,11 @@ namespace Radegast
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            instance.State.SetDefaultCamera();
             Cursor.Current = Cursors.WaitCursor;
             Prims.Clear();
             AddAllObjects();
+
             Cursor.Current = Cursors.Default;
         }
 
@@ -916,7 +923,7 @@ namespace Radegast
                 gbxInworld.Enabled = true;
                 btnBuy.Tag = currentPrim;
 
-                if (currentPrim.Properties == null || (currentPrim.Properties != null && currentPrim.Properties.CreatorID == UUID.Zero))
+                if (currentPrim.Properties == null || currentPrim.OwnerID == UUID.Zero || (currentPrim.Properties != null && currentPrim.Properties.CreatorID == UUID.Zero))
                 {
                     client.Objects.SelectObject(client.Network.CurrentSim, currentPrim.LocalID);
                 }
@@ -1145,6 +1152,15 @@ namespace Radegast
 
             if (currentPrim.Properties != null)
             {
+                if (currentPrim.Properties.CreatorID == client.Self.AgentID &&
+                    currentPrim.Properties.OwnerID == client.Self.AgentID)
+                {
+                    ctxMenuObjects.Items.Add("Export", null, btnExport_Click);
+                }
+            }
+
+            if (currentPrim.Properties != null)
+            {
                 bool isMuted = null != client.Self.MuteList.Find(me => me.Type == MuteType.Object && me.ID == currentPrim.ID);
 
                 if (isMuted)
@@ -1220,6 +1236,11 @@ namespace Radegast
             gbxContents.Show();
             UpdateObjectContents();
             lstContents.Focus();
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            instance.MainForm.DisplayExportConsole(currentPrim.LocalID);
         }
 
         private void lstContents_MouseDoubleClick(object sender, MouseEventArgs e)

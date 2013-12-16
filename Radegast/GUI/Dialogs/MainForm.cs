@@ -336,7 +336,7 @@ namespace Radegast
             {
                 if (InAutoReconnect)
                 {
-                    if (instance.GlobalSettings["auto_reconnect"].AsBoolean())
+                    if (instance.GlobalSettings["auto_reconnect"].AsBoolean() && e.FailReason != "tos")
                         BeginAutoReconnect();
                     else
                         InAutoReconnect = false;
@@ -1075,7 +1075,8 @@ namespace Radegast
 
         private void importObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PrimDeserializer.ImportFromFile(client);
+            //PrimDeserializer.ImportFromFile(client);
+            DisplayImportConsole();
         }
 
         private void autopilotToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1119,15 +1120,44 @@ namespace Radegast
 
         }
 
+        int filesDeleted;
+
+        private void deleteFolder(DirectoryInfo dir)
+        {
+            foreach (var file in dir.GetFiles())
+            {
+                try 
+                {
+                    file.Delete();
+                    filesDeleted++;
+                }
+                catch { }
+            }
+
+            foreach (var subDir in dir.GetDirectories())
+            {
+                deleteFolder(subDir);
+            }
+
+            try { dir.Delete(); }
+            catch { }
+        }
+
         private void cleanCacheToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ThreadPool.QueueUserWorkItem(sync => client.Assets.Cache.Clear());
+            WorkPool.QueueUserWorkItem(sync =>
+            {
+                filesDeleted = 0;
+                try { deleteFolder(new DirectoryInfo(client.Settings.ASSET_CACHE_DIR)); }
+                catch { }
+                Logger.DebugLog("Wiped out " + filesDeleted + " files from the cache directory.");
+            });
             instance.Names.CleanCache();
         }
 
         private void rebakeTexturesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            client.Appearance.RequestSetAppearance(true);
+            instance.COF.RebakeTextures();
         }
 
         public void MapToCurrentLocation()
@@ -1542,6 +1572,55 @@ namespace Radegast
             }
         }
 
+        public void DisplayExportConsole(uint localID)
+        {
+            if (InvokeRequired)
+            {
+                if (IsHandleCreated || !instance.MonoRuntime)
+                    BeginInvoke(new MethodInvoker(() => DisplayExportConsole(localID)));
+                return;
+            }
+
+            if (tabsConsole.TabExists("export console"))
+            {
+                tabsConsole.Tabs["export console"].Close();
+            }
+            RadegastTab tab = tabsConsole.AddTab("export console", "Export Object", new ExportConsole(client, localID));
+            tab.Select();
+        }
+
+        public void DisplayImportConsole()
+        {
+            if (TabConsole.TabExists("import console"))
+            {
+                TabConsole.Tabs["import console"].Select();
+            }
+            else
+            {
+                RadegastTab tab = tabsConsole.AddTab("import console", "Import Object", new ImportConsole(client));
+                tab.AllowClose = false;
+                tab.AllowHide = true;
+                tab.Select();
+            }
+        }
+
+        public void DisplayColladaConsole(Primitive prim)
+        {
+            if (InvokeRequired)
+            {
+                if (IsHandleCreated || !instance.MonoRuntime)
+                    BeginInvoke(new MethodInvoker(() => DisplayColladaConsole(prim)));
+                return;
+            }
+
+            if (tabsConsole.TabExists("collada console"))
+            {
+                tabsConsole.Tabs["collada console"].Close();
+            }
+            RadegastTab tab = tabsConsole.AddTab("collada console", "Export Collada", new ExportCollada(instance, prim));
+            tab.Select();
+        }
+
         private void regionParcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DisplayRegionParcelConsole();
@@ -1549,6 +1628,7 @@ namespace Radegast
 
         private void tlblParcel_Click(object sender, EventArgs e)
         {
+            if (!client.Network.Connected) return;
             DisplayRegionParcelConsole();
         }
 
