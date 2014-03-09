@@ -1,6 +1,6 @@
 // 
 // Radegast Metaverse Client
-// Copyright (c) 2009-2013, Radegast Development Team
+// Copyright (c) 2009-2014, Radegast Development Team
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -391,7 +391,7 @@ namespace Radegast
                     }
                     else if (e.IM.IMSessionID == UUID.Zero)
                     {
-                        String msg = string.Format("Region message from {0}: {1}", instance.Names.Get(e.IM.FromAgentID, e.IM.FromAgentName), e.IM.Message);
+                        String msg = string.Format("Message from {0}: {1}", instance.Names.Get(e.IM.FromAgentID, e.IM.FromAgentName), e.IM.Message);
                         instance.MainForm.AddNotification(new ntfGeneric(instance, msg));
                         DisplayNotificationInChat(msg);
                     }

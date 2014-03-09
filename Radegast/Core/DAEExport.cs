@@ -1,6 +1,6 @@
 ﻿// 
 // Radegast Metaverse Client
-// Copyright (c) 2009-2013, Radegast Development Team
+// Copyright (c) 2009-2014, Radegast Development Team
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -803,7 +803,6 @@ namespace Radegast
 
                 // Set tranform matrix (node position, rotation and scale)
                 var matrix = node.AppendChild(Doc.CreateElement("matrix"));
-                OpenTK.Matrix4 m;
 
                 var srt = Radegast.Rendering.Math3D.CreateSRTMatrix(obj.Prim.Scale, obj.Prim.Rotation, obj.Prim.Position);
                 string matrixVal = "";

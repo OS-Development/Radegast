@@ -1,6 +1,6 @@
 ﻿// 
 // Radegast Metaverse Client
-// Copyright (c) 2009-2013, Radegast Development Team
+// Copyright (c) 2009-2014, Radegast Development Team
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -543,7 +543,7 @@ namespace Radegast
                 AddLink(item);
             }
 
-            Client.Appearance.ReplaceOutfit(outfit);
+            Client.Appearance.ReplaceOutfit(outfit, false);
             WorkPool.QueueUserWorkItem(sync =>
             {
                 Thread.Sleep(2000);
