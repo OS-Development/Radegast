@@ -390,6 +390,15 @@ namespace Radegast
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (instance.GlobalSettings["confirm_exit"].AsBoolean())
+            {
+                if (MessageBox.Show("Are you sure you want to exit Radegast?", "Confirm Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != System.Windows.Forms.DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
             if (statusTimer != null)
             {
                 statusTimer.Stop();
@@ -1216,7 +1225,7 @@ namespace Radegast
 
         private void reportBugsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ProcessLink("http://jira.openmetaverse.org/browse/RAD");
+            ProcessLink("https://metaverse.atlassian.net/browse/RAD");
         }
 
         private void accessibilityGuideToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1485,7 +1494,8 @@ namespace Radegast
                 }
                 ShowInTaskbar = false;
                 trayIcon.Visible = true;
-                FormBorderStyle = FormBorderStyle.SizableToolWindow;
+                trayIcon.BalloonTipText = "Radegast is runnig in the background";
+                trayIcon.ShowBalloonTip(2000);
             }
         }
 
@@ -1494,7 +1504,6 @@ namespace Radegast
             WindowState = FormWindowState.Normal;
             ShowInTaskbar = true;
             trayIcon.Visible = false;
-            FormBorderStyle = FormBorderStyle.Sizable;
         }
 
         private void ctxTreyRestore_Click(object sender, EventArgs e)
