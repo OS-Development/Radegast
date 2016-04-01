@@ -637,7 +637,7 @@ namespace Radegast
                 try
                 {
                     File.AppendAllText(ChatFileName(sessioName),
-                        DateTime.Now.ToString("yyyy-MM-dd [HH:mm:ss] ") + message + Environment.NewLine);
+                        DateTime.Now.ToString("[yyyy/MM/dd HH:mm:ss]  ") + message + Environment.NewLine);
                 }
                 catch (Exception) { }
             }
