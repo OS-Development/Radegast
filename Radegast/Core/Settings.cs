@@ -57,7 +57,7 @@ namespace Radegast
             }
             catch
             {
-                Logger.DebugLog("Failed openning setting file: " + fileName);
+                Logger.DebugLog("Failed opening settings file: " + fileName);
                 SettingsData = new OSDMap();
                 Save();
             }
