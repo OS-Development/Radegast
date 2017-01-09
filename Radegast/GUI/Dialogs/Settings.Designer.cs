@@ -152,6 +152,20 @@ namespace Radegast
             this.cbxForeground = new System.Windows.Forms.ComboBox();
             this.cbxFontSize = new System.Windows.Forms.ComboBox();
             this.cbxFont = new System.Windows.Forms.ComboBox();
+            this.tabNetwork = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtProxyPort = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.txtProxyPassword = new System.Windows.Forms.TextBox();
+            this.txtProxyUser = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.txtProxyURL = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.ckUseProxy = new System.Windows.Forms.CheckBox();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.tcGraphics.SuspendLayout();
             this.tbpGeneral.SuspendLayout();
@@ -169,6 +183,8 @@ namespace Radegast
             ((System.ComponentModel.ISupportInitialize)(this.pseudoHomeTolerance)).BeginInit();
             this.autoSit.SuspendLayout();
             this.tbpChat.SuspendLayout();
+            this.tabNetwork.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tcGraphics
@@ -178,6 +194,7 @@ namespace Radegast
             this.tcGraphics.Controls.Add(this.tbpGraphics);
             this.tcGraphics.Controls.Add(this.tbpBot);
             this.tcGraphics.Controls.Add(this.tbpChat);
+            this.tcGraphics.Controls.Add(this.tabNetwork);
             this.tcGraphics.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcGraphics.Location = new System.Drawing.Point(0, 0);
             this.tcGraphics.Multiline = true;
@@ -1221,6 +1238,161 @@ namespace Radegast
             this.cbxFont.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cbxFont_DrawItem);
             this.cbxFont.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChanged);
             // 
+            // tabNetwork
+            // 
+            this.tabNetwork.Controls.Add(this.groupBox2);
+            this.tabNetwork.Controls.Add(this.ckUseProxy);
+            this.tabNetwork.Location = new System.Drawing.Point(4, 22);
+            this.tabNetwork.Name = "tabNetwork";
+            this.tabNetwork.Padding = new System.Windows.Forms.Padding(3);
+            this.tabNetwork.Size = new System.Drawing.Size(522, 427);
+            this.tabNetwork.TabIndex = 6;
+            this.tabNetwork.Text = "Network";
+            this.tabNetwork.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.AccessibleName = "Proxy settings panel";
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Controls.Add(this.txtProxyPort);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.label13);
+            this.groupBox2.Controls.Add(this.txtProxyPassword);
+            this.groupBox2.Controls.Add(this.txtProxyUser);
+            this.groupBox2.Controls.Add(this.label14);
+            this.groupBox2.Controls.Add(this.label15);
+            this.groupBox2.Controls.Add(this.txtProxyURL);
+            this.groupBox2.Controls.Add(this.label16);
+            this.groupBox2.Location = new System.Drawing.Point(20, 41);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(494, 205);
+            this.groupBox2.TabIndex = 2;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Web Proxy Settings";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.Gray;
+            this.label1.Location = new System.Drawing.Point(76, 102);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "e.g. 8080";
+            // 
+            // label11
+            // 
+            this.label11.ForeColor = System.Drawing.Color.Gray;
+            this.label11.Location = new System.Drawing.Point(97, 174);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(235, 28);
+            this.label11.TabIndex = 4;
+            this.label11.Text = "Leave username/password blank if not required";
+            // 
+            // txtProxyPort
+            // 
+            this.txtProxyPort.AccessibleName = "Port textbox";
+            this.txtProxyPort.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.txtProxyPort.Location = new System.Drawing.Point(70, 79);
+            this.txtProxyPort.Name = "txtProxyPort";
+            this.txtProxyPort.Size = new System.Drawing.Size(71, 20);
+            this.txtProxyPort.TabIndex = 1;
+            this.txtProxyPort.Leave += new System.EventHandler(this.txtProxyPort_Leave);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(6, 82);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(29, 13);
+            this.label12.TabIndex = 7;
+            this.label12.Text = "Port:";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.ForeColor = System.Drawing.Color.Gray;
+            this.label13.Location = new System.Drawing.Point(76, 58);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(153, 13);
+            this.label13.TabIndex = 6;
+            this.label13.Text = "e.g. http://<yourproxyaddress>";
+            // 
+            // txtProxyPassword
+            // 
+            this.txtProxyPassword.AccessibleName = "Password textbox";
+            this.txtProxyPassword.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.txtProxyPassword.Location = new System.Drawing.Point(131, 146);
+            this.txtProxyPassword.Name = "txtProxyPassword";
+            this.txtProxyPassword.Size = new System.Drawing.Size(201, 20);
+            this.txtProxyPassword.TabIndex = 3;
+            this.txtProxyPassword.Leave += new System.EventHandler(this.txtProxyPassword_Leave);
+            // 
+            // txtProxyUser
+            // 
+            this.txtProxyUser.AccessibleName = "Username textbox";
+            this.txtProxyUser.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.txtProxyUser.Location = new System.Drawing.Point(131, 121);
+            this.txtProxyUser.Name = "txtProxyUser";
+            this.txtProxyUser.Size = new System.Drawing.Size(201, 20);
+            this.txtProxyUser.TabIndex = 2;
+            this.txtProxyUser.Leave += new System.EventHandler(this.txtProxyUser_Leave);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(67, 149);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(56, 13);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "Password:";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(67, 124);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(58, 13);
+            this.label15.TabIndex = 2;
+            this.label15.Text = "Username:";
+            // 
+            // txtProxyURL
+            // 
+            this.txtProxyURL.AccessibleName = "URI textbox";
+            this.txtProxyURL.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.txtProxyURL.Location = new System.Drawing.Point(70, 35);
+            this.txtProxyURL.Name = "txtProxyURL";
+            this.txtProxyURL.Size = new System.Drawing.Size(262, 20);
+            this.txtProxyURL.TabIndex = 0;
+            this.txtProxyURL.Leave += new System.EventHandler(this.txtProxyURL_Leave);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 38);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(29, 13);
+            this.label16.TabIndex = 0;
+            this.label16.Text = "URI:";
+            // 
+            // ckUseProxy
+            // 
+            this.ckUseProxy.AccessibleName = "Use web proxy option";
+            this.ckUseProxy.AutoSize = true;
+            this.ckUseProxy.FlatAppearance.BorderColor = System.Drawing.Color.Silver;
+            this.ckUseProxy.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
+            this.ckUseProxy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSteelBlue;
+            this.ckUseProxy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ckUseProxy.Location = new System.Drawing.Point(20, 18);
+            this.ckUseProxy.Name = "ckUseProxy";
+            this.ckUseProxy.Size = new System.Drawing.Size(97, 17);
+            this.ckUseProxy.TabIndex = 1;
+            this.ckUseProxy.Text = "Use Web Proxy";
+            this.ckUseProxy.UseVisualStyleBackColor = true;
+            this.ckUseProxy.CheckedChanged += new System.EventHandler(this.ckUseProxy_CheckedChanged);
+            this.ckUseProxy.CheckStateChanged += new System.EventHandler(this.ckUseProxy_CheckStateChanged);
+            // 
             // fontDialog1
             // 
             this.fontDialog1.ShowColor = true;
@@ -1260,6 +1432,10 @@ namespace Radegast
             this.autoSit.PerformLayout();
             this.tbpChat.ResumeLayout(false);
             this.tbpChat.PerformLayout();
+            this.tabNetwork.ResumeLayout(false);
+            this.tabNetwork.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1359,5 +1535,19 @@ namespace Radegast
         private System.Windows.Forms.Label lblPreview;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnResetFontSettings;
+        private System.Windows.Forms.TabPage tabNetwork;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox txtProxyPort;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox txtProxyPassword;
+        private System.Windows.Forms.TextBox txtProxyUser;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox txtProxyURL;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.CheckBox ckUseProxy;
     }
 }

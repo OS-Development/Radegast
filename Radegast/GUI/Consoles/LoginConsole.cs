@@ -483,6 +483,12 @@ namespace Radegast
                 instance.Client.Settings.HTTP_INVENTORY = true;
             }
 
+            RadeProxy proxy = new RadeProxy();
+
+            proxy.SetProxy(instance.GlobalSettings["use_proxy"], instance.GlobalSettings["proxy_url"], instance.GlobalSettings["proxy_port"], instance.GlobalSettings["proxy_user"], instance.GlobalSettings["proxy_password"]);
+
+
+
             netcom.Login();
             SaveConfig();
         }
