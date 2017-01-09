@@ -128,6 +128,8 @@ namespace Radegast.Rendering
             Client.Objects.TerseObjectUpdate += new EventHandler<TerseObjectUpdateEventArgs>(Objects_TerseObjectUpdate);
             Client.Objects.ObjectUpdate += new EventHandler<PrimEventArgs>(Objects_ObjectUpdate);
             Client.Objects.ObjectDataBlockUpdate += new EventHandler<ObjectDataBlockUpdateEventArgs>(Objects_ObjectDataBlockUpdate);
+
+            Radegast.GUI.GuiHelpers.ApplyGuiFixes(this);
         }
 
         void frmPrimWorkshop_Disposed(object sender, EventArgs e)
@@ -757,7 +759,7 @@ namespace Radegast.Rendering
                         GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, data.TexCoords);
                         GL.VertexPointer(3, VertexPointerType.Float, 0, data.Vertices);
                         GL.NormalPointer(NormalPointerType.Float, 0, data.Normals);
-                        GL.DrawElements(BeginMode.Triangles, data.Indices.Length, DrawElementsType.UnsignedShort, data.Indices);
+                        GL.DrawElements(PrimitiveType.Triangles, data.Indices.Length, DrawElementsType.UnsignedShort, data.Indices);
 
                     }
 

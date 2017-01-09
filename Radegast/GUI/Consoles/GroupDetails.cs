@@ -120,6 +120,8 @@ namespace Radegast
             instance.Names.NameUpdated += new EventHandler<UUIDNameReplyEventArgs>(Names_NameUpdated);
             RefreshControlsAvailability();
             RefreshGroupInfo();
+
+            Radegast.GUI.GuiHelpers.ApplyGuiFixes(this);
         }
 
         void GroupDetails_Disposed(object sender, EventArgs e)
@@ -507,6 +509,10 @@ namespace Radegast
             if (member.LastOnline != DateTime.MinValue)
             {
                 item.SubItems.Add(new ListViewItem.ListViewSubItem(item, member.Base.OnlineStatus));
+            }
+            else
+            {
+                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, "N/A"));
             }
 
             e.Item = item;

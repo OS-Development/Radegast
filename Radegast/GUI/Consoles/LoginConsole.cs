@@ -66,6 +66,7 @@ namespace Radegast
 
             Load += new EventHandler(LoginConsole_Load);
 
+            Radegast.GUI.GuiHelpers.ApplyGuiFixes(this);
         }
 
         private void MainConsole_Disposed(object sender, EventArgs e)
@@ -76,8 +77,10 @@ namespace Radegast
 
         void LoginConsole_Load(object sender, EventArgs e)
         {
-            if (instance.PlainColors)
+            if (!instance.GlobalSettings["theme_compatibility_mode"] && instance.PlainColors)
+            {
                 panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(225)))));
+            }
 
             cbxLocation.SelectedIndex = 0;
             cbxUsername.SelectedIndexChanged += cbxUsername_SelectedIndexChanged;
@@ -471,9 +474,21 @@ namespace Radegast
             if (netcom.LoginOptions.Grid.Platform != "SecondLife")
             {
                 instance.Client.Settings.MULTIPLE_SIMS = true;
+                instance.Client.Settings.HTTP_INVENTORY = !instance.GlobalSettings["disable_http_inventory"];
+            }
+            else
+            {
+                // UDP inventory is deprecated as of 2015-03-30 and no longer supported.
+                // https://community.secondlife.com/t5/Second-Life-Server/Deploy-for-the-week-of-2015-03-30/td-p/2919194
+                instance.Client.Settings.HTTP_INVENTORY = true;
             }
 
-            instance.Client.Settings.HTTP_INVENTORY = !instance.GlobalSettings["disable_http_inventory"];
+            RadeProxy proxy = new RadeProxy();
+
+            proxy.SetProxy(instance.GlobalSettings["use_proxy"], instance.GlobalSettings["proxy_url"], instance.GlobalSettings["proxy_port"], instance.GlobalSettings["proxy_user"], instance.GlobalSettings["proxy_password"]);
+
+
+
             netcom.Login();
             SaveConfig();
         }

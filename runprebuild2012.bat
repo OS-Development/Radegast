@@ -15,14 +15,14 @@
 ::
 
 echo ##########################################
-echo creating prebuild files for: vs2010
+echo creating prebuild files for: vs2012
 echo Parameters: %1 %2
 echo ##########################################
 
 if not exist bin mkdir bin
 
 :: run prebuild to generate solution/project files from prebuild.xml configuration file
-Radegast\prebuild.exe /target vs2012
+Build\Windows\Premake5.exe vs2012
 
 :: build compile.bat file based on command line parameters
 echo @echo off > compile.bat
