@@ -71,8 +71,8 @@ namespace Radegast
                 StringBuilder report = new StringBuilder();
                 AddStacktrace(ref report, ex);
                 AddPostField("report", report.ToString());
-                AddPostField("version", RadegastBuild.VersionString);
-                AddPostField("build", RadegastBuild.BuildName);
+                AddPostField("version", Properties.Resources.RadegastTitle);
+                AddPostField("build", RadegastBuild.CurrentRev.ToString());
 
                 // Send the request
                 WebRequest request = WebRequest.Create(url);

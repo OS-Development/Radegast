@@ -38,7 +38,7 @@ namespace Radegast
             : base(instance)
         {
             InitializeComponent();
-            txtTitle.Text = Properties.Resources.RadegastTitle + " " + RadegastBuild.VersionString;
+            txtTitle.Text = Properties.Resources.RadegastTitle + "." + RadegastBuild.CurrentRev;
 
             Radegast.GUI.GuiHelpers.ApplyGuiFixes(this);
         }

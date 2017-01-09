@@ -62,7 +62,7 @@ namespace Radegast
 
             instance.GlobalSettings.OnSettingChanged += new Settings.SettingChangedCallback(GlobalSettings_OnSettingChanged);
 
-            lblVersion.Text = Properties.Resources.RadegastTitle + " " + RadegastBuild.VersionString;
+            lblVersion.Text = Properties.Resources.RadegastTitle + "." + RadegastBuild.CurrentRev;
 
             Load += new EventHandler(LoginConsole_Load);
 
@@ -482,6 +482,12 @@ namespace Radegast
                 // https://community.secondlife.com/t5/Second-Life-Server/Deploy-for-the-week-of-2015-03-30/td-p/2919194
                 instance.Client.Settings.HTTP_INVENTORY = true;
             }
+
+            RadeProxy proxy = new RadeProxy();
+
+            proxy.SetProxy(instance.GlobalSettings["use_proxy"], instance.GlobalSettings["proxy_url"], instance.GlobalSettings["proxy_port"], instance.GlobalSettings["proxy_user"], instance.GlobalSettings["proxy_password"]);
+
+
 
             netcom.Login();
             SaveConfig();

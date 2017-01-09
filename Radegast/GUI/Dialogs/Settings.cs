@@ -154,6 +154,13 @@ namespace Radegast
             {
                 s["on_script_question"] = "Ask";
             }
+
+            if (!s.ContainsKey("use_proxy")) s["use_proxy"] = false;
+
+            if (!s.ContainsKey("proxy_url")) s["proxy_url"] = "";
+            if (!s.ContainsKey("proxy_port")) s["proxy_port"] = "";
+            if (!s.ContainsKey("proxy_user")) s["proxy_user"] = "";
+            if (!s.ContainsKey("proxy_password")) s["proxy_password"] = "";
         }
 
         private void InitColorSettings()
@@ -420,6 +427,26 @@ namespace Radegast
             LSLHelperPrefsUpdate();
 
             cbAutoScriptPermission.Text = s["on_script_question"];
+
+            ckUseProxy.Checked = s["use_proxy"];
+
+            txtProxyURL.Text = s["proxy_url"];
+            txtProxyPort.Text = s["proxy_port"];
+            txtProxyUser.Text = s["proxy_user"];
+            txtProxyPassword.Text = s["proxy_password"];
+
+            /*
+            RadeProxy proxy = new RadeProxy();
+
+            if (ckUseProxy.Checked)
+            {
+                proxy.SetProxy(ckUseProxy.Checked, txtProxyURL.Text, txtProxyPort.Text, txtProxyUser.Text, txtProxyPassword.Text);
+            }
+            else
+            {
+                RadeProxy.DisableProxy();
+            }
+            */
 
             UpdateEnabled();
 
@@ -1025,6 +1052,41 @@ namespace Radegast
             {
                 ResetFontSettings();
             }
+        }
+
+        private void ckUseProxy_CheckStateChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void txtProxyURL_Leave(object sender, EventArgs e)
+        {
+            s["proxy_url"] = txtProxyURL.Text;
+        }
+
+        private void txtProxyPort_Leave(object sender, EventArgs e)
+        {
+            s["proxy_port"] = txtProxyPort.Text;
+        }
+
+        private void txtProxyUser_Leave(object sender, EventArgs e)
+        {
+            s["proxy_user"] = txtProxyUser.Text;
+        }
+
+        private void txtProxyPassword_Leave(object sender, EventArgs e)
+        {
+            s["proxy_password"] = txtProxyPassword.Text;
+        }
+
+        private void ckUseProxy_CheckedChanged(object sender, EventArgs e)
+        {
+            txtProxyURL.Enabled = ckUseProxy.Checked;
+            txtProxyPort.Enabled = ckUseProxy.Checked;
+            txtProxyUser.Enabled = ckUseProxy.Checked;
+            txtProxyPassword.Enabled = ckUseProxy.Checked;
+
+            s["use_proxy"] = OSD.FromBoolean(ckUseProxy.Checked);
+
         }
     }
 
